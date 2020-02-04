@@ -18,6 +18,7 @@ def products(request):
 
 class HomeView(ListView):
     model = Item
+    paginate_by = 10
     template_name = "home.html"
 
 
@@ -62,6 +63,7 @@ def remove_from_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
     order_queryset = Order.objects.filter(user=request.user, ordered=False)
 
+    # if an active cart exists
     if order_queryset.exists():
         order = order_queryset[0]
         # if the item is in the cart
