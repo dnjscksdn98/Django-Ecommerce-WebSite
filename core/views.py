@@ -5,28 +5,30 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
-from .models import Item, OrderItem, Order
+
+from .models import Item, OrderItem, Order, BillingAddress
+from .forms import CheckoutForm
+
+# def checkout(request):
+#     return render(request, "checkout.html")
 
 
-def checkout(request):
-    return render(request, "checkout.html")
-
-
-def products(request):
-    context = {
-        'items': Item.objects.all()
-    }
-    return render(request, "products.html", context)
+# def products(request):
+#     context = {
+#         'items': Item.objects.all()
+#     }
+#     return render(request, "products.html", context)
 
 
 class HomeView(ListView):
     model = Item
-    paginate_by = 10
+    paginate_by = 4
     template_name = "home.html"
 
 
 class OrderSummaryView(LoginRequiredMixin, View):
-    # LoginRequiredMixin : if required, redirects to the login page first
+    # LoginRequiredMixin : if required, redirects to the login page first == @login_required
+    # Normal View Class : redefine get()
     def get(self, *args, **kwargs):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
@@ -136,3 +138,48 @@ def remove_single_item_from_cart(request, slug):
     else:
         messages.info(request, "You do not have an active order")
         return redirect('core:product', slug=slug)
+
+
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+        context = {
+            'form': form
+        }
+
+        return render(self.request, "checkout.html", context)
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+
+            if form.is_valid():
+                street_address = form.cleaned_data.get('street_address')
+                apartment_address = form.cleaned_data.get('apartment_address')
+                country = form.cleaned_data.get('country')
+                zip = form.cleaned_data.get('zip')
+                # TODO: add functionality for these fields
+                # same_shipping_address = form.cleaned_data.get('shipping_address')
+                # save_info = form.cleaned_data.get('save_info')
+                payment_option = form.cleaned_data.get('payment_option')
+
+                billing_address = BillingAddress(
+                    user=self.request.user,
+                    street_address=street_address,
+                    apartment_address=apartment_address,
+                    country=country,
+                    zip=zip
+                )
+                billing_address.save()
+                order.billing_address = billing_address
+                order.save()
+                # TODO: add redirect to the selected payment option
+                return redirect('core:checkout')
+
+            messages.warning(self.request, 'Failed checkout')
+            return redirect('core:checkout')
+
+        except ObjectDoesNotExist:
+            return redirect("core:order-summary")
