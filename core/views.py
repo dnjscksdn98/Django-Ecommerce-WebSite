@@ -92,6 +92,8 @@ def remove_from_cart(request, slug):
                 item=item, user=request.user, ordered=False
             )[0]
             order.items.remove(order_item)
+            order_item.quantity = 1
+            order_item.save()
             messages.info(request, "This item was removed from your cart")
             return redirect('core:order-summary')
 
