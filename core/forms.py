@@ -13,12 +13,14 @@ class CheckoutForm(forms.Form):
     street_address = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'address',
-        'placeholder': '1234 Main St'
+        'placeholder': '1234 Main St',
+        'autocomplete': 'off'
     }))
     apartment_address = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'id': 'address-2',
-        'placeholder': 'Apartment or suite'
+        'placeholder': 'Apartment or suite',
+        'autocomplete': 'off'
     }))
     country = CountryField(blank_label='(select country)').formfield(
         widget=CountrySelectWidget(attrs={
@@ -27,7 +29,8 @@ class CheckoutForm(forms.Form):
     )
     zip = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'id': 'zip'
+        'id': 'zip',
+        'autocomplete': 'off'
     }))
 
     same_shipping_address = forms.BooleanField(
@@ -41,3 +44,13 @@ class CheckoutForm(forms.Form):
         widget=forms.RadioSelect(),
         choices=PAYMENT_CHOICES
     )  # only one select is possible
+
+
+class CouponForm(forms.Form):
+    code = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Promo Code',
+        'aria-label': "Recipient's username",
+        'aria-describedby': 'basic-addon2',
+        'autocomplete': 'off'
+    }))
