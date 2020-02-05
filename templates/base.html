@@ -10,8 +10,6 @@
       {% block head_title %}
       {% endblock %}
     </title>
-    {% block extra_head %}
-    {% endblock %}
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Bootstrap core CSS -->
@@ -23,6 +21,9 @@
 
     {% block style %}
     {% endblock style %}
+
+    {% block extra_head %}
+    {% endblock %}
 
     {% include "navbar.html" %}
 </head>
@@ -46,6 +47,9 @@
 
     {% block extra_body %}
     {% endblock extra_body%}
+
+    {% block extra_scripts %}
+    {% endblock extra_scripts %}
 
     {% include "footer.html" %}
 
