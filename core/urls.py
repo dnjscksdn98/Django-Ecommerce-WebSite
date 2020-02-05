@@ -21,5 +21,7 @@ urlpatterns = [
     path('remove-single-item-from-cart/<slug>/',
          remove_single_item_from_cart, name='remove-single-item-from-cart'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
+
+    # redirect to the given slug(payment-option)
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
 ]
