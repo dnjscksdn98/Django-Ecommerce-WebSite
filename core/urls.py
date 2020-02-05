@@ -7,7 +7,8 @@ from .views import (
     OrderSummaryView,
     remove_single_item_from_cart,
     CheckoutView,
-    PaymentView
+    PaymentView,
+    AddCouponView
 )
 
 app_name = 'core'
@@ -24,4 +25,6 @@ urlpatterns = [
 
     # redirect to the given slug(payment-option)
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
+
+    path('add-coupon/', AddCouponView.as_view(), name='add-coupon')
 ]
