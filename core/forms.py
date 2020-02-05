@@ -11,9 +11,13 @@ PAYMENT_CHOICES = (
 
 class CheckoutForm(forms.Form):
     street_address = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'address',
         'placeholder': '1234 Main St'
     }))
     apartment_address = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'id': 'address-2',
         'placeholder': 'Apartment or suite'
     }))
     country = CountryField(blank_label='(select country)').formfield(
@@ -22,13 +26,16 @@ class CheckoutForm(forms.Form):
         })
     )
     zip = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control'
+        'class': 'form-control',
+        'id': 'zip'
     }))
 
     same_shipping_address = forms.BooleanField(
-        required=False, widget=forms.CheckboxInput())
+        required=False, widget=forms.CheckboxInput()
+    )
     save_info = forms.BooleanField(
-        required=False, widget=forms.CheckboxInput())
+        required=False, widget=forms.CheckboxInput()
+    )
 
     payment_option = forms.ChoiceField(
         widget=forms.RadioSelect(),
