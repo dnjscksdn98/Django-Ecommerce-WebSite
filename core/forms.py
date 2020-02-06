@@ -54,3 +54,15 @@ class CouponForm(forms.Form):
         'aria-describedby': 'basic-addon2',
         'autocomplete': 'off'
     }))
+
+
+class RefundForm(forms.Form):
+    ref_code = forms.CharField(widget=forms.TextInput(attrs={
+        'autocomplete': 'off'
+    }))
+    message = forms.CharField(widget=forms.Textarea(attrs={
+        'rows': 4
+    }))
+    email = forms.EmailField(widget=forms.TextInput(attrs={
+        'autocomplete': 'off'
+    }))
