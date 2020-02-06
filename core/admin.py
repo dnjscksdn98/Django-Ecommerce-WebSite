@@ -10,6 +10,20 @@ def make_refund_accepted(modeladmin, request, queryset):
 make_refund_accepted.short_description = 'Update orders to refund granted'
 
 
+def make_being_delivered(modeladmin, request, queryset):
+    queryset.update(being_delivered=True)
+
+
+make_being_delivered.short_description = 'Update orders to being delivered'
+
+
+def make_order_received(modeladmin, request, queryset):
+    queryset.update(being_delivered=False, received=True)
+
+
+make_order_received.short_description = 'Update orders to received'
+
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         'user',
@@ -41,7 +55,9 @@ class OrderAdmin(admin.ModelAdmin):
         'ref_code'
     ]
     actions = [
-        make_refund_accepted
+        make_refund_accepted,
+        make_being_delivered,
+        make_order_received
     ]
 
 
