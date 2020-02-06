@@ -148,4 +148,4 @@ class Refund(models.Model):
     email = models.EmailField()
 
     def __str__(self):
-        return f"{self.pk}"
+        return self.order.user.username
