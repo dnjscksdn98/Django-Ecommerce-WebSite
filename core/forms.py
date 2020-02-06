@@ -10,35 +10,32 @@ PAYMENT_CHOICES = (
 
 
 class CheckoutForm(forms.Form):
-    street_address = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'address',
-        'placeholder': '1234 Main St',
-        'autocomplete': 'off'
-    }))
-    apartment_address = forms.CharField(required=False, widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'address-2',
-        'placeholder': 'Apartment or suite',
-        'autocomplete': 'off'
-    }))
-    country = CountryField(blank_label='(select country)').formfield(
+    shipping_address1 = forms.CharField(required=False)
+    shipping_address2 = forms.CharField(required=False)
+    shipping_country = CountryField(blank_label='select country').formfield(
+        required=False,
         widget=CountrySelectWidget(attrs={
             'class': 'custom-select d-block w-100'
         })
     )
-    zip = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'id': 'zip',
-        'autocomplete': 'off'
-    }))
+    shipping_zip = forms.CharField(required=False)
 
-    same_shipping_address = forms.BooleanField(
-        required=False, widget=forms.CheckboxInput()
+    billing_address1 = forms.CharField(required=False)
+    billing_address2 = forms.CharField(required=False)
+    billing_country = CountryField(blank_label='select country').formfield(
+        required=False,
+        widget=CountrySelectWidget(attrs={
+            'class': 'custom-select d-block w-100'
+        })
     )
-    save_info = forms.BooleanField(
-        required=False, widget=forms.CheckboxInput()
-    )
+    billing_zip = forms.CharField(required=False)
+
+    same_billing_address = forms.BooleanField(required=False)
+    set_default_shipping = forms.BooleanField(required=False)
+    use_default_shipping = forms.BooleanField(required=False)
+
+    set_default_billing = forms.BooleanField(required=False)
+    use_default_billing = forms.BooleanField(required=False)
 
     payment_option = forms.ChoiceField(
         widget=forms.RadioSelect(),
