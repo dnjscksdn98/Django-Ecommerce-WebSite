@@ -58,11 +58,17 @@ class CouponForm(forms.Form):
 
 class RefundForm(forms.Form):
     ref_code = forms.CharField(widget=forms.TextInput(attrs={
-        'autocomplete': 'off'
+        'autocomplete': 'off',
+        'class': 'form-control',
+        'id': 'form106'
     }))
     message = forms.CharField(widget=forms.Textarea(attrs={
-        'rows': 4
+        'rows': 4,
+        'class': 'md-textarea form-control',
+        'id': 'form107'
     }))
     email = forms.EmailField(widget=forms.TextInput(attrs={
-        'autocomplete': 'off'
+        'autocomplete': 'off',
+        'class': 'form-control',
+        'id': 'form105'
     }))
