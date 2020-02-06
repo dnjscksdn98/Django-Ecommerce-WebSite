@@ -103,11 +103,11 @@ def remove_from_cart(request, slug):
             return redirect('core:order-summary')
 
         else:
-            messages.info(request, "This item is not in your cart")
+            messages.warning(request, "This item is not in your cart")
             return redirect('core:order-summary')
 
     else:
-        messages.info(request, "You do not have an active order")
+        messages.warning(request, "You do not have an active order")
         return redirect('core:order-summary')
 
 
@@ -135,11 +135,11 @@ def remove_single_item_from_cart(request, slug):
             return redirect('core:order-summary')
 
         else:
-            messages.info(request, 'This item is not in your cart')
+            messages.warning(request, 'This item is not in your cart')
             return redirect('core:product', slug=slug)
 
     else:
-        messages.info(request, 'You do not have an active order')
+        messages.warning(request, 'You do not have an active order')
         return redirect('core:product', slug=slug)
 
 
@@ -158,7 +158,7 @@ class CheckoutView(View):
             return render(self.request, "checkout.html", context)
 
         except ObjectDoesNotExist:
-            messages.info(self.request, 'You do not have an active order.')
+            messages.warning(self.request, 'You do not have an active order.')
             return redirect('core:order-summary')
 
     def post(self, *args, **kwargs):
@@ -293,8 +293,7 @@ def get_coupon(request, code):
         return coupon
 
     except ObjectDoesNotExist:
-        messages.info(request, 'This coupon does not exist.')
-        return redirect('core:checkout')
+        raise ValueError
 
 
 class AddCouponView(View):
@@ -312,5 +311,10 @@ class AddCouponView(View):
                 return redirect('core:checkout')
 
             except ObjectDoesNotExist:
-                messages.info(self.request, 'You do not have an active order.')
+                messages.warning(
+                    self.request, 'You do not have an active order.')
+                return redirect('core:checkout')
+
+            except ValueError:
+                messages.warning(self.request, 'This coupon does not exist.')
                 return redirect('core:checkout')
