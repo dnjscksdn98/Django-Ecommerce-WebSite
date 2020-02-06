@@ -11,23 +11,23 @@
   .carousel {
     height: 60vh;
   }
-
-  @media (max-width: 740px) {
-    html,
-    body,
-    header,
-    .carousel {
-      height: 100vh;
-    }
+  .form-gradient .header {
+    border-top-left-radius: .3rem;
+    border-top-right-radius: .3rem;
   }
-
-  @media (min-width: 800px) and (max-width: 850px) {
-    html,
-    body,
-    header,
-    .carousel {
-      height: 100vh;
-    }
+  .form-gradient input[type=text]:focus:not([readonly]) {
+    border-bottom: 1px solid #fd9267;
+    box-shadow: 0 1px 0 0 #fd9267;
+  }
+  .form-gradient input[type=text]:focus:not([readonly]) + label {
+    color: #4f4f4f;
+  }
+  .form-gradient textarea.md-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #fd9267;
+    box-shadow: 0 1px 0 0 #fd9267;
+  }
+  .form-gradient .md-form textarea.md-textarea:focus:not([readonly])+label {
+    color: #4f4f4f;
   }
 </style>
 
@@ -39,7 +39,7 @@
 <main>
   <div class="container">
 
-    <div class="table-responsive mt-3 mb-3">
+    {% comment %} <div class="table-responsive mt-3 mb-3">
         <h2>Request Refund</h2>
 
         <form method="POST">
@@ -48,11 +48,72 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         
-    </div>
+    </div> {% endcomment %}
+
+    <!-- Section: form gradient -->
+    <form class="form-gradient mb-5" method="POST">
+        {% csrf_token %}
+
+        <!--Form with header-->
+        <div class="card">
+
+            <!--Header-->
+            <div class="header blue-gradient">
+
+                <div class="row d-flex justify-content-center">
+                    <h3 class="white-text mb-0 py-5 font-weight-bold">Request refund</h3>
+                </div>
+
+            </div>
+            <!--Header-->
+
+            <div class="card-body mx-4">
+
+                <div class="md-form">
+                    <i class="fas fa-envelope prefix grey-text"></i>
+                    {% comment %} <input type="text" id="form105" class="form-control"> {% endcomment %}
+                    {{ form.email }}
+                    <label for="form105">Your email</label>
+                </div>
+
+                <div class="md-form">
+                    <i class="fas fa-tag prefix grey-text"></i>
+                    {% comment %} <input type="text" id="form106" class="form-control"> {% endcomment %}
+                    {{ form.ref_code }}
+                    <label for="form106">Ref code</label>
+                </div>
+
+                <div class="md-form">
+                    <i class="fas fa-pencil-alt prefix grey-text"></i>
+                    {% comment %} <textarea id="form107" class="md-textarea form-control" rows="5"></textarea> {% endcomment %}
+                    {{ form.message}}
+                    <label for="form107">Your message</label>
+                </div>
+
+
+                <!--Grid row-->
+                <div class="row d-flex align-items-center mb-3 mt-4">
+
+                    <!--Grid column-->
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-grey btn-rounded z-depth-1a">Submit</button>
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+            <!--Grid row-->
+            </div>
+
+        </div>
+        <!--/Form with header-->
+
+    </form>
+    <!-- Section: form gradient -->
 
   </div>
 </main>
 <!--Main layout-->
 
 {% endblock content %}
-
