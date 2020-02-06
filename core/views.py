@@ -7,21 +7,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, View
 
-from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon
-from .forms import CheckoutForm, CouponForm
+from .models import Item, OrderItem, Order, BillingAddress, Payment, Coupon, Refund
+from .forms import CheckoutForm, CouponForm, RefundForm
+
+import random
+import string
 
 import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
-# def checkout(request):
-#     return render(request, "checkout.html")
-
-
-# def products(request):
-#     context = {
-#         'items': Item.objects.all()
-#     }
-#     return render(request, "products.html", context)
 
 
 class HomeView(ListView):
@@ -204,6 +197,11 @@ class CheckoutView(View):
             return redirect('core:order-summary')
 
 
+def create_ref_code():
+    # create a random ordered char + number code which the length is 20
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+
+
 class PaymentView(View):
     def get(self, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
@@ -248,6 +246,9 @@ class PaymentView(View):
 
             order.ordered = True
             order.payment = payment
+
+            # assign reference code
+            order.ref_code = create_ref_code()
             order.save()
 
             messages.success(self.request, 'Your order was successful!')
@@ -318,3 +319,41 @@ class AddCouponView(View):
             except ValueError:
                 messages.warning(self.request, 'This coupon does not exist.')
                 return redirect('core:checkout')
+
+
+class RequestRefundView(View):
+    def get(self, *args, **kwargs):
+        form = RefundForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, 'request_refund.html', context)
+
+    def post(self, *args, **kwargs):
+        form = RefundForm(self.request.POST)
+
+        if form.is_valid():
+            ref_code = form.cleaned_data.get('ref_code')
+            message = form.cleaned_data.get('message')
+            email = form.cleaned_data.get('email')
+
+            try:
+                # edit the order
+                order = Order.objects.get(ref_code=ref_code)
+                order.refund_requested = True
+                order.save()
+
+                # store the refund
+                refund = Refund(
+                    order=order,
+                    reason=message,
+                    email=email
+                )
+                refund.save()
+
+                messages.info(self.request, 'Your request was received.')
+                return redirect('core:request-refund')
+
+            except ObjectDoesNotExist:
+                messages.warning(self.request, 'This order does not exist.')
+                return redirect('core:request-refund')
