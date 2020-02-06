@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Item, OrderItem, Order, Payment, Coupon, Refund
 
 
+# create custom action
 def make_refund_accepted(modeladmin, request, queryset):
     queryset.update(refund_requested=False, refund_granted=True)
 
@@ -19,8 +20,7 @@ class OrderAdmin(admin.ModelAdmin):
         'refund_granted',
         'billing_address',
         'payment',
-        'coupon',
-        'ref_code'
+        'coupon'
     ]
     list_display_links = [
         'user',
