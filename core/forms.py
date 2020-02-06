@@ -52,6 +52,8 @@ class CouponForm(forms.Form):
         'autocomplete': 'off'
     }))
 
+# TODO : add user profile
+
 
 class RefundForm(forms.Form):
     ref_code = forms.CharField(widget=forms.TextInput(attrs={
