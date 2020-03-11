@@ -5,15 +5,15 @@ from django_countries.fields import CountryField
 
 
 CATEGORY_CHOICES = (
-    ('S', 'Shirt'),
-    ('SW', 'Sport wear'),
-    ('OW', 'Outwear')
+    ('T', 'TV'),
+    ('P', 'Phone'),
+    ('L', 'Laptop')
 )
 
 LABEL_CHOICES = (
-    ('P', 'primary'),
-    ('S', 'secondary'),
-    ('D', 'danger')
+    ('D', 'Default'),
+    ('N', 'New'),
+    ('B', 'Best seller')
 )
 
 ADDRESS_CHOICES = (
